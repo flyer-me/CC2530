@@ -17,7 +17,8 @@ char RxBuf;
 char UartState;
 uchar count;
 char RxData[SIZE];        //存储发送字符串
-
+//修改
+uchar txNext;
 /****************************************************************************
 * 名    称: DelayMS()
 * 功    能: 以毫秒为单位延时
@@ -49,6 +50,24 @@ void InitUart(void)
     U0BAUD |= 216;           //波特率设为115200
     UTX0IF = 0;              //UART0 TX中断标志初始置位0
     U0CSR |= 0x40;           //允许接收
+    //修改 
+    //使能串口发送
+    IEN2 |= 0x04; //开USART0发送(TX)中断
+    IEN0 |= 0x84; //开总中断允许接收(RX)中断
+    EA=1;
+}
+
+//修改 中断发送函数
+#pragma vector = UTX0_VECTOR 
+__interrupt void UART0TX_ISR(void) { 
+  txNext=1;
+  UTX0IF = 0; // 清中断标志
+}
+//修改 中断接收函数
+#pragma vector = URX0_VECTOR 
+__interrupt void UART0RX_ISR(void) { 
+  RxBuf = U0DBUF; //取出接收到字节
+  URX0IF = 0; // 清中断标志
 }
 
 /****************************************************************************
@@ -67,7 +86,17 @@ void UartSendString(char *Data, int len)
         UTX0IF = 0;
     }
 }
-
+//修改的发送字符串函数
+void UartTX_Send_String(char *Data,int len) {
+  int i;
+  for(i=0;i<len;i++) {
+    txNext=0;
+    U0DBUF=*Data++;
+    while(txNext==0); 
+   }
+  U0DBUF='\n';
+  while(txNext==0);
+}
 
 /****************************************************************************
 * 程序入口函数
@@ -86,9 +115,7 @@ void main(void)
     {
         if(UartState == UART0_RX)              //接收状态
         {
-          while(URX0IF==0);
-          URX0IF=0;
-          RxBuf = U0DBUF;
+          //修改：删除轮询代码
           if(RxBuf != 0)
           {
                 if((RxBuf != '#')&&(count < 50))//以'＃'为结束符,一次最多接收50个字符
@@ -110,7 +137,8 @@ void main(void)
         if(UartState == UART0_TX)              //发送状态
         {
             U0CSR &= ~0x40;                    //禁止接收
-            UartSendString(RxData, count);     //发送已记录的字符串。
+            //修改
+            UartTX_Send_String(RxData, count);   //发送已记录的字符串。
             U0CSR |= 0x40;                     //允许接收
             UartState = UART0_RX;              //恢复到接收状态
             count = 0;                         //计数清0
