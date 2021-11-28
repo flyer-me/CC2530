@@ -155,4 +155,9 @@ void UartTX_Send_String(char *Data,int len)
   }
 }
 
-/*	代码标记：代码为Github/Gitee:flyer-me 编写	USTB CC2530实验程序：ADC模块	2021.11.26完成	*/
+/*
+*代码标记：代码为Github/Gitee:flyer-me  编写	
+*USTB CC2530实验程序：ADC模块	 419**045   飞
+*指导：hu siquan
+*2021.11.26完成
+*/
