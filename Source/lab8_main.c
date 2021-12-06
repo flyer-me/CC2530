@@ -18,7 +18,6 @@ void Timer1_Init(void)
 
     T1CCTL0=0x64;     //设置CC0的比较输出中断
     T1CTL = 0x0E;     //128分频 模模式
-    TIMIF &= ~0x40;   //禁止定时器1溢出中断, 等同于T1OVFIM =0;
 
     T1IE = 1;
     EA = 1;           //开总中断
