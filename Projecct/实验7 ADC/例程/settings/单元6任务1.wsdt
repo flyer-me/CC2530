@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>135</Column0><Column1>50</Column1><Column2>27</Column2><Column3>0</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>980</ColumnWidth1><ColumnWidth2>261</ColumnWidth2><ColumnWidth3>65</ColumnWidth3></Build>
+    <TerminalIO/><Debug-Log><ColumnWidth0>21</ColumnWidth0><ColumnWidth1>1860</ColumnWidth1></Debug-Log><Watch><PreferedWindows><Position>4</Position><ScreenPosX>187</ScreenPosX><ScreenPosY>862</ScreenPosY><Windows/></PreferedWindows></Watch></Static>
+    <Windows>
+      
+      
+    <Wnd2>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-5239-1383</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1</ExpandedNode><ExpandedNode>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1/Output</ExpandedNode><ExpandedNode>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1/Output/&#x5355;&#x5143;6&#x4eFB;&#x52A1;1.d51</ExpandedNode><ExpandedNode>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1/&#x5355;&#x5143;6&#x4eFB;&#x52A1;1.c</ExpandedNode><ExpandedNode>&#x5355;&#x5143;6&#x4eFB;&#x52A1;1/&#x5355;&#x5143;6&#x4eFB;&#x52A1;1.c/Output</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-2688-1840</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-16986-31891</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\&#x5355;&#x5143;6&#x4eFB;&#x52A1;1.c</Filename><XPos>0</XPos><YPos>63</YPos><SelStart>2045</SelStart><SelEnd>2045</SelEnd></Tab><ActiveTab>0</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-05354b50><key>iaridepm.enu1</key></Toolbar-05354b50></Sizes></Row0><Row1><Sizes/></Row1><Row2><Sizes/></Row2></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>496</Bottom><Right>232</Right><x>-2</x><y>-2</y><xscreen>36</xscreen><yscreen>67</yscreen><sizeHorzCX>27586</sizeHorzCX><sizeHorzCY>97953</sizeHorzCY><sizeVertCX>179310</sizeVertCX><sizeVertCY>728070</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>143</Bottom><Right>1307</Right><x>-2</x><y>-2</y><xscreen>1309</xscreen><yscreen>145</yscreen><sizeHorzCX>1003065</sizeHorzCX><sizeHorzCY>211988</sizeHorzCY><sizeVertCX>27586</sizeVertCX><sizeVertCY>97953</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
