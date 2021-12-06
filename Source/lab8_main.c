@@ -10,8 +10,6 @@ void Timer1_Init(void)
     T1CC0L = 0xC8;    //设置T1CC0,PWM输出时比较值上限 = 200
     T1CC0H = 0x00;
     //修改========
-    //T1CCTL2 = 0x64;   //不中断时用0x24，设置T1通道2，模式4 - Clear Output on Compare-Up,Set on Compare-Down
-
     T1CCTL2 = 0x74;   //设置T1的通道2，0x74产生中断 模式 - Set when=T1CC0,clear when=T1CC2
     T1CC2L = 0x0A;    //设置T1输出通道2比较输出值
     T1CC2H = 0x00;
@@ -38,10 +36,6 @@ void LED_Init(void)
 #pragma vector = T1_VECTOR
 __interrupt void T1_ISR(void)
 {
-      /*
-       T1STAT &= ~(1 << 2);
-       LED2 = ~LED2;
-       */
     if(T1STAT&0x04)
     {
       T1STAT &= ~(1 << 2);
