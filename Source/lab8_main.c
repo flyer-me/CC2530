@@ -29,8 +29,7 @@ void LED_Init(void)
 {
   CLKCONCMD &= 0x80;
   PERCFG |= 0x40;   //定时器1 的IO位置 2: T1 location=2
-  P2SEL &= ~0x10; //优先定时器1比较输
-  出功能
+  P2SEL &= ~0x10; //优先定时器1比较输出功能
   //P2DIR |= 0xC0; //第1优先级：定时器1通道2-3
   P1SEL |= 0x01;    //设置P1.0为外设功能, P1.1依然是普通GPIO
   P1DIR |= 0x03;    //设置LED1的引脚P1.0, LED2的引脚P1.1为输出
