@@ -1,25 +1,27 @@
 #include "ioCC2530.h"
 
-//#define LED1 P1_0     // LED1定义为1_0
+  //#define LED1 P1_0     // LED1定义为1_0
 #define LED2 P1_1     // LED2定义为1_1
 //#define LED3 P1_4     // LED3定义为1_4
 
 
 void Timer1_Init(void)
-{   
+{
     T1CC0L = 0xC8;    //设置T1CC0,PWM输出时比较值上限 = 200
-    T1CC0H = 0x00;    
+    T1CC0H = 0x00;
+    //修改========
+    //T1CCTL2 = 0x64;   //不中断时用0x24，设置T1通道2，模式4 - Clear Output on Compare-Up,Set on Compare-Down
 
-    T1CCTL2 = 0x64;   //不中断时用0x24，设置T1输出的Channel 2，模式4 - Clear Output on Compare-Up,Set on Compare-Down
-    TIMIF &= ~0x40;  //禁止定时器1溢出中断, 等同于T1OVFIM =0;
+    T1CCTL2 = 0x74;   //设置T1的通道2，0x74产生中断 模式 - Set when=T1CC0,clear when=T1CC2
+    T1CC2L = 0x0A;    //设置T1输出通道2比较输出值
+    T1CC2H = 0x00;
 
-    //T1CC2L = 0xF7;    //设置T1输出通道2比较输出值
-    //T1CC2H = 0x00;    
-    
-    //配置工作模式和分频系数
-     T1CTL = 0x0F;
-   
-     T1IE = 1; 
+    T1CCTL0=0x64;     //设置CC0的比较输出中断
+    T1CTL = 0x0E;     //128分频 模模式
+    TIMIF &= ~0x40;   //禁止定时器1溢出中断, 等同于T1OVFIM =0;
+
+    T1IE = 1;
+    EA = 1;           //开总中断
 }
 
 
@@ -27,21 +29,33 @@ void LED_Init(void)
 {
   CLKCONCMD &= 0x80;
   PERCFG |= 0x40;   //定时器1 的IO位置 2: T1 location=2
-  P2SEL &= ~0x10; //P1.0做外设时有多种定义，设置优先选择定时器1比较输出功能
+  P2SEL &= ~0x10; //优先定时器1比较输
+  出功能
   //P2DIR |= 0xC0; //第1优先级：定时器1通道2-3
-  P1DIR |= 0x13;    //设置LED1的引脚P1.0, LED2的引脚P1.1为输出
   P1SEL |= 0x01;    //设置P1.0为外设功能, P1.1依然是普通GPIO
-
-  P1 &= ~0x13; //全灭  
+  P1DIR |= 0x03;    //设置LED1的引脚P1.0, LED2的引脚P1.1为输出
+  P1 &= ~0x13; //全灭
 }
 
 #pragma vector = T1_VECTOR
-__interrupt void T1_ISR(void){
-    
+__interrupt void T1_ISR(void)
+{
+      /*
        T1STAT &= ~(1 << 2);
        LED2 = ~LED2;
-} 
-
+       */
+    if(T1STAT&0x04)
+    {
+      T1STAT &= ~(1 << 2);
+      LED2 = 0;
+    }
+    else if(T1STAT&0x01)
+    {
+      T1STAT &= ~(1 << 0);
+      LED2 = 1;
+    }
+}
+    //修改========
 
 void Delay(unsigned int xms)
 {
@@ -66,8 +80,6 @@ void main(void)
       {
         T1CC2L = rate[i];
         T1CC2H = 0x00;
- 
-        EA = 1;   
 
         Delay(50000);
         Delay(50000);
