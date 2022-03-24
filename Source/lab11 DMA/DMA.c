@@ -1,237 +1,87 @@
-//-------------------DMA TESTING -----------------//
-/******************************************************
-ÊµÑéÄÚÈİ£º Éè¶¨DMA
-µ±¼ì²âµ½°´¼üS1Ê±£¬Éè¶¨DMA´ÓRAMÀï×ª³öÊı¾İ£¬Èç¹û³É¹¦£¬Ôò
-µãÁÁLED3²¢ÔÚc´®¿ÚÉÏÌáÊ¾ Correct£¬ ·ñÔòÌáÊ¾ Error
-******************************************************/
-
-#define LED1 P1_0       //¶¨ÒåP1.0¿ÚÎªLED1¿ØÖÆ¶Ë
-#define LED2 P1_1       //¶¨ÒåP1.1¿ÚÎªLED2¿ØÖÆ¶Ë
-#define LED3 P1_4       //¶¨ÒåP1.4¿ÚÎªLED3¿ØÖÆ¶Ë
-
-#define KEY1 P0_1       // P0.1¿Ú¿ØÖÆ°´¼üKEY1
-
 #include "hal.h"
 #include "hal_types.h"
 #include <string.h>
-char  titleString[] = "-------- DMA Testing --------";
-char  hintString[]  = "...Push KEY1 to start DMA ...";
-char  goodString[]  = "...yes, DMA transfer correct";
-char  badString[]   = "...bad,DMA transfer Error";
+#define HAL_DMA_U0DBUF    0x70C1
 
-
+char revbuf[20]; 
+INT8 count = 0;
 
 /****************************************************************************
-* Ãû    ³Æ: LedOnOrOff()
-* ¹¦    ÄÜ: µãÁÁ»òÏ¨ÃğËùÓĞLEDµÆ    
-* Èë¿Ú²ÎÊı: modeÎª0Ê±LEDµÆÁÁ  modeÎª1Ê±LEDµÆÃğ
-* ³ö¿Ú²ÎÊı: ÎŞ
-****************************************************************************/
-void LedOnOrOff(uint8 mode)
-{
-    LED1 = mode;
-    LED2 = mode;
-    LED3 = mode; 
-}
-
-
-/****************************************************************************
-* Ãû    ³Æ: InitLed()
-* ¹¦    ÄÜ: ÉèÖÃLEDÏàÓ¦µÄIO¿Ú
-* Èë¿Ú²ÎÊı: ÎŞ
-* ³ö¿Ú²ÎÊı: ÎŞ
-****************************************************************************/
-void InitLed(void)
-{
-
-  P1DIR |= 0x01;               //P1.0¶¨ÒåÎªÊä³ö¿Ú  
-  P1DIR |= 0x02;               //P1.1¶¨ÒåÎªÊä³ö¿Ú 
-  P1DIR |= 0x10;               //P1.4¶¨ÒåÎªÊä³ö¿Ú 
-  asm("NOP");
-  
-  LedOnOrOff(0);  // Ê¹ËùÓĞLEDµÆÄ¬ÈÏÎªÏ¨Ãğ×´Ì¬  
-}
-
-/****************************************************************************
-* Ãû    ³Æ: InitKey()
-* ¹¦    ÄÜ: ÉèÖÃ°´¼üÏàÓ¦µÄIO¿Ú
-* Èë¿Ú²ÎÊı: ÎŞ
-* ³ö¿Ú²ÎÊı: ÎŞ
-****************************************************************************/
-void InitKey(void)
-{
-  
-    P0SEL &= ~0x02;     //ÉèÖÃP0.1ÎªÆÕÍ¨IO¿Ú  
-    P0DIR &= ~0x02;     //°´¼ü½ÓÔÚP0.1¿ÚÉÏ£¬ÉèP0.1ÎªÊäÈëÄ£Ê½ 
-    P0INP &= ~0x02;     //´ò¿ªP0.1ÉÏÀ­µç×è
-  
-}
-
-/****************************************************************************
-* Ãû    ³Æ: KeyScan()
-* ¹¦    ÄÜ: ¶ÁÈ¡°´¼ü×´Ì¬
-* Èë¿Ú²ÎÊı: ÎŞ
-* ³ö¿Ú²ÎÊı: 0ÎªÌ§Æğ   1Îª°´¼ü°´ÏÂ
-****************************************************************************/
-unsigned char KeyScan(void)
-{
-    if (KEY1 == 0)
-    {
-        halWait(20);
-        if (KEY1 == 0)
-        {
-            while(!KEY1); //ËÉÊÖ¼ì²â
-            return 1;     //ÓĞ°´¼ü°´ÏÂ
-        }
-    }
-    
-    return 0;             //ÎŞ°´¼ü°´ÏÂ
-}
-
-/****************************
-//IO³õÊ¼»¯³ÌĞò
-*****************************/
-void Initial_IO(void)
-{
-    InitLed();
-    InitKey();
-}
-
-
-void initDma(void);
-/****************************************************************************
-* Ãû    ³Æ: InitUart()
-* ¹¦    ÄÜ: ´®¿Ú³õÊ¼»¯º¯Êı
-* Èë¿Ú²ÎÊı: ÎŞ
-* ³ö¿Ú²ÎÊı: ÎŞ
+* å    ç§°: InitUart()
+* åŠŸ    èƒ½: ä¸²å£åˆå§‹åŒ–å‡½æ•°
+* å…¥å£å‚æ•°: æ— 
+* å‡ºå£å‚æ•°: æ— 
 ****************************************************************************/
 void InitUart(void)
 { 
-    PERCFG = 0x00;           //ÍâÉè¿ØÖÆ¼Ä´æÆ÷ USART 0µÄIOÎ»ÖÃ:0ÎªP0¿ÚÎ»ÖÃ1 
-    P0SEL = 0x0c;            //P0_2,P0_3ÓÃ×÷´®¿Ú£¨ÍâÉè¹¦ÄÜ£©
-    P2DIR &= ~0xC0;          //P0ÓÅÏÈ×÷ÎªUART0
+    PERCFG = 0x00;           //å¤–è®¾æ§åˆ¶å¯„å­˜å™¨ USART 0çš„IOä½ç½®:0ä¸ºP0å£ä½ç½®1 
+    P0SEL = 0x0c;            //P0_2,P0_3ç”¨ä½œä¸²å£ï¼ˆå¤–è®¾åŠŸèƒ½ï¼‰
+    P2DIR &= ~0xC0;          //P0ä¼˜å…ˆä½œä¸ºUART0
     
-    U0CSR |= 0x80;           //ÉèÖÃÎªUART·½Ê½
+    U0CSR |= 0x80;           //è®¾ç½®ä¸ºUARTæ–¹å¼
     U0GCR |= 11;	     // baud_e		       
-    U0BAUD |= 216;           //²¨ÌØÂÊÉèÎª115200
-    UTX0IF = 0;              //UART0 TXÖĞ¶Ï±êÖ¾³õÊ¼ÖÃÎ»0
-    U0CSR |= 0x40;           //ÔÊĞí½ÓÊÕ 
-}
-
-/****************************************************************************
-* Ãû    ³Æ: UartSendString()
-* ¹¦    ÄÜ: ´®¿Ú·¢ËÍº¯Êı
-* Èë¿Ú²ÎÊı: Data:·¢ËÍ»º³åÇø   len:·¢ËÍ³¤¶È
-* ³ö¿Ú²ÎÊı: ÎŞ
-****************************************************************************/
-void UartSendString(char *Data, int len)
-{
-    uint16 i;
+    U0BAUD |= 216;           //æ³¢ç‰¹ç‡è®¾ä¸º115200
+    UTX0IF = 0;              //UART0 TXä¸­æ–­æ ‡å¿—åˆå§‹ç½®ä½0
+    U0CSR |= 0x40;           //å…è®¸æ¥æ”¶ 
     
-    for(i=0; i<len; i++)
-    {
-        U0DBUF = *Data++;
-        while(UTX0IF == 0);
-        UTX0IF = 0;
-    }
-      U0DBUF = 0x0d;
-        while(UTX0IF == 0);
-        UTX0IF = 0;
-      U0DBUF = 0x0a;
-        while(UTX0IF == 0);
-        UTX0IF = 0;
-       halWait(600);
-
+    IEN0 |= 0x84; //å¼€æ€»ä¸­æ–­å…è®¸æ¥æ”¶(RX)ä¸­æ–­
+    EA=1;
 }
 
-/******************************************************************************
-* @fn  initDma
-*
-* @brief
-*      Initializes components for the DMA transfer application example.
-******************************************************************************/
+//ä¸­æ–­æ¥æ”¶å‡½æ•°
+#pragma vector = URX0_VECTOR 
+__interrupt void UART0RX_ISR(void) 
+{ 
+  revbuf[count++] = U0DBUF;//æ•°æ®å…¥ç¼“å†²åŒº
+  URX0IF = 0;              // æ¸…ä¸­æ–­æ ‡å¿—
+}
+
+//åˆå§‹åŒ–DMAä¼ è¾“åº”ç”¨ç¨‹åºç¤ºä¾‹
 void initDma(void)
 {
    SET_MAIN_CLOCK_SOURCE(CRYSTAL);
    
-   Initial_IO();
-   InitUart();  //µ÷ÓÃ´®¿Ú³õÊ¼»¯º¯Êı   
-
-   UartSendString(&titleString[0], sizeof(titleString));  //ÏÔÊ¾Title×Ö·û´®
+   InitUart();  //è°ƒç”¨ä¸²å£åˆå§‹åŒ–å‡½æ•°   
 }
 
-
-/******************************************************************************
-* @fn  dma_main
-*
-* @brief
-*      Sets up the DMA to transfer data between to RAM locations, trigged by
-*      external interrupt generated by button S1. Checks validity of data
-*      after transfer.
-******************************************************************************/
+//main
 void main(void){
    DMA_DESC dmaChannel;
-   char     sourceString[] = "This is a test string used to demonstrate DMA transfer.";
-   char     destString[ sizeof(sourceString) ];
-   INT8     i;
-   INT8     errors = 0;
 
    initDma();
-
-   //Clearing the destination
-   memset(destString, 0, sizeof(destString) );
-
+   //memset(revbuf, 0, sizeof(revbuf) );
      // Setting up the DMA channel.
-   SET_WORD(dmaChannel.SRCADDRH, dmaChannel.SRCADDRL,   &sourceString); // The start address of the data to be transmitted
-   SET_WORD(dmaChannel.DESTADDRH, dmaChannel.DESTADDRL, &destString);   // The start address of the destination.
-   SET_WORD(dmaChannel.LENH, dmaChannel.LENL, sizeof(sourceString));    // Setting the number of bytes to transfer.
+   SET_WORD(dmaChannel.SRCADDRH, dmaChannel.SRCADDRL,   &revbuf); // è¢«ä¼ é€dataé¦–åœ°å€
+   SET_WORD(dmaChannel.DESTADDRH, dmaChannel.DESTADDRL, HAL_DMA_U0DBUF);   //ä»¥HAL_DMA_U0DBUFä¸ºç›®çš„åœ°
+   SET_WORD(dmaChannel.LENH, dmaChannel.LENL, sizeof(revbuf));    // Setting the number of bytes to transfer.
    dmaChannel.VLEN      = VLEN_USE_LEN;  // Using the length field to determine how many bytes to transfer.
    dmaChannel.PRIORITY  = PRI_HIGH;      // High priority.
    dmaChannel.M8        = M8_USE_8_BITS; // Irrelevant since length is determined by the LENH and LENL.
    dmaChannel.IRQMASK   = FALSE;         // The DMA shall not issue an IRQ upon completion.
-   dmaChannel.DESTINC   = DESTINC_1;     // The destination address is to be incremented by 1 after each transfer.
-   dmaChannel.SRCINC    = SRCINC_1;      // The source address inremented by 1 byte after each transfer.
-   dmaChannel.TRIG      = DMATRIG_NONE;  // The DMA channel will be started manually.
-   dmaChannel.TMODE     = TMODE_BLOCK;   // The number of bytes specified by LENH and LENL is transferred.
+   dmaChannel.DESTINC   = DESTINC_0;     // æ¯æ¬¡ä¼ é€åï¼Œä¸æ”¹å˜ç›®çš„åœ°å€
+   dmaChannel.SRCINC    = SRCINC_1;      // æ¯æ¬¡ä¼ é€åï¼Œæºåœ°å€+1
+   dmaChannel.TRIG      = DMATRIG_URX0;  // UARTæ¥æ”¶å®Œæˆåå¯åŠ¨
+   dmaChannel.TMODE     = TMODE_SINGLE;   // æ¯æ¬¡ä¸€ä¸ªå­—èŠ‚
    dmaChannel.WORDSIZE  = WORDSIZE_BYTE; // One byte is transferred each time.
 
-   while(1){
-   // Using DMA channel 0.
-   // Setting where the DMA channel is to read the desciptor and arming the DMA channel.
-   DMA_SET_ADDR_DESC0(&dmaChannel);
-   DMA_ABORT_CHANNEL(0);
-   DMA_ARM_CHANNEL(0);
+   DMA_SET_ADDR_DESC0(&dmaChannel);//DMAå¯„å­˜å™¨é…ç½® (DMA0CFGHã€DMA0CFGL)
+   DMA_ABORT_CHANNEL(0);// åœæ­¢é€šé“0
+   DMA_ARM_CHANNEL(0);  //DMAé€šé“0è¿›å…¥å·¥ä½œçŠ¶æ€    
+   halWait(255); 
 
-
-   //Waiting for the user to start the transfer.
-
-   UartSendString(&hintString[0], sizeof(hintString)); //ÏÔÊ¾°´¼üÌáÊ¾×Ö·û´®
-   while(!KeyScan());
-   halWait(255);
-
-   // Clearing all DMA complete flags and starting the transfer.
-   DMAIRQ = 0x00;
-   DMA_START_CHANNEL(0);
-
-   // Waiting for the DMA to finish.
-   while(!(DMAIRQ & DMA_CHANNEL_0));
-
-   // Verifying that data is transferred correctly
-   for(i=0;i<sizeof(sourceString);i++)
+   while(1)
    {
-     if(sourceString[i] != destString[i])
-         errors++;
-   }
+       if(count>=20)    //å½“DMAæºåœ°å€åˆ°è¾¾ç¼“å†²åŒºæœ«å°¾ï¼Œé‡ç½®DMA
+       {
+         count=0;
+         //memset(revbuf, 0, sizeof(revbuf) ); //æ¸…ç©ºç¼“å†²åŒº éå¿…è¦
+         DMA_SET_ADDR_DESC0(&dmaChannel);   //DMAå¯„å­˜å™¨é…ç½® (DMA0CFGHã€DMA0CFGL)
+         DMA_ABORT_CHANNEL(0);              // åœæ­¢é€šé“0
+         DMA_ARM_CHANNEL(0);                //DMAé€šé“0è¿›å…¥å·¥ä½œçŠ¶æ€ DMAARM0 = 1
+         halWait(255); 
+       }
 
-   //ÏÔÊ¾DMA´«Êä½á¹û
-   if(errors == 0){
-     UartSendString(&goodString[0], sizeof(goodString)); //ÏÔÊ¾³É¹¦×Ö·û´®
-     LED1=1;
-   }
-   else{
-       UartSendString(&badString[0], sizeof(badString)); //ÏÔÊ¾Ê§°Ü×Ö·û´®
-   }
-  }
+    while(!(DMAIRQ & DMA_CHANNEL_0));   //ç­‰å¾…DMAç»“æŸ
 
+   }
 }
-
