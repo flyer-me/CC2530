@@ -4,9 +4,8 @@
 #include "stdlib.h"	
 #include "ioCC2530.h"
 
-
-#define USE_HORIZONTAL 0  //ÉèÖÃºáÆÁ»òÕßÊúÆÁÏÔÊ¾ 0»ò1ÎªÊúÆÁ 2»ò3ÎªºáÆÁ
-//#define USE_HORIZONTAL 2  //ÉèÖÃºáÆÁ»òÕßÊúÆÁÏÔÊ¾ 0»ò1ÎªÊúÆÁ 2»ò3ÎªºáÆÁ
+#define USE_HORIZONTAL 0  //è®¾ç½®æ¨ªå±æˆ–è€…ç«–å±æ˜¾ç¤º 0æˆ–1ä¸ºç«–å± 2æˆ–3ä¸ºæ¨ªå±
+//#define USE_HORIZONTAL 2  //è®¾ç½®æ¨ªå±æˆ–è€…ç«–å±æ˜¾ç¤º 0æˆ–1ä¸ºç«–å± 2æˆ–3ä¸ºæ¨ªå±
 
 #if USE_HORIZONTAL==0||USE_HORIZONTAL==1
 #define LCD_W 240
@@ -20,7 +19,7 @@
 #define	u16 unsigned int
 #define	u32 unsigned long
 
-// ½Ó¿ÚÒı½Å¶¨Òå
+// æ¥å£å¼•è„šå®šä¹‰
 #define lcd_sclk      P1_5 //
 #define lcd_sdin       P1_6 // MOSI
 #define lcd_sdout       P1_7 // MISO
@@ -28,7 +27,7 @@
 #define lcd_reset      P1_3 //
 //#define lcd_blk      P1_0 //
 
-//-----------------OLED¶Ë¿Ú¶¨Òå---------------- 
+//-----------------OLEDç«¯å£å®šä¹‰---------------- 
 
 #define OLED_SCLK_Clr() lcd_sclk=0
 #define OLED_SCLK_Set() lcd_sclk=1
@@ -45,10 +44,10 @@
 #define OLED_BLK_Clr() //lcd_blk=0
 #define OLED_BLK_Set()  //lcd_blk=1
 
-#define OLED_CMD  0	//Ğ´ÃüÁî
-#define OLED_DATA 1	//Ğ´Êı¾İ
+#define OLED_CMD  0	//å†™å‘½ä»¤
+#define OLED_DATA 1	//å†™æ•°æ®
 
-extern  u16 BACK_COLOR;   //±³¾°É«
+extern  u16 BACK_COLOR;   //èƒŒæ™¯è‰²
 
 void LCD_Writ_Bus(u8 dat);
 void LCD_WR_DATA8(u8 dat);
@@ -72,7 +71,7 @@ void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color);
 void LCD_ShowPicture(u16 x1,u16 y1,u16 x2,u16 y2);
 
 
-//»­±ÊÑÕÉ«
+//ç”»ç¬”é¢œè‰²
 #define WHITE         	 0xFFFF
 #define BLACK         	 0x0000	  
 #define BLUE           	 0x001F  
@@ -84,25 +83,20 @@ void LCD_ShowPicture(u16 x1,u16 y1,u16 x2,u16 y2);
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 		 0XBC40 //×ØÉ«
-#define BRRED 		 0XFC07 //×ØºìÉ«
-#define GRAY  		 0X8430 //»ÒÉ«
+#define BROWN 		 0XBC40 //æ£•è‰²
+#define BRRED 		 0XFC07 //æ£•çº¢è‰²
+#define GRAY  		 0X8430 //ç°è‰²
 
-//GUIÑÕÉ«
-#define DARKBLUE      	 0X01CF	//ÉîÀ¶É«
-#define LIGHTBLUE      	 0X7D7C	//Ç³À¶É«  
-#define GRAYBLUE       	 0X5458 //»ÒÀ¶É«
-//ÒÔÉÏÈıÉ«ÎªPANELµÄÑÕÉ« 
+//GUIé¢œè‰²
+#define DARKBLUE      	 0X01CF	//æ·±è“è‰²
+#define LIGHTBLUE      	 0X7D7C	//æµ…è“è‰²  
+#define GRAYBLUE       	 0X5458 //ç°è“è‰²
+//ä»¥ä¸Šä¸‰è‰²ä¸ºPANELçš„é¢œè‰² 
  
-#define LIGHTGREEN     	 0X841F //Ç³ÂÌÉ«
-#define LGRAY 		 0XC618 //Ç³»ÒÉ«(PANNEL),´°Ìå±³¾°É«
+#define LIGHTGREEN     	 0X841F //æµ…ç»¿è‰²
+#define LGRAY 		 0XC618 //æµ…ç°è‰²(PANNEL),çª—ä½“èƒŒæ™¯è‰²
 
-#define LGRAYBLUE        0XA651 //Ç³»ÒÀ¶É«(ÖĞ¼ä²ãÑÕÉ«)
-#define LBBLUE           0X2B12 //Ç³×ØÀ¶É«(Ñ¡ÔñÌõÄ¿µÄ·´É«)
+#define LGRAYBLUE        0XA651 //æµ…ç°è“è‰²(ä¸­é—´å±‚é¢œè‰²)
+#define LBBLUE           0X2B12 //æµ…æ£•è“è‰²(é€‰æ‹©æ¡ç›®çš„åè‰²)
 					  		 
-#endif  
-	 
-	 
-
-
-
+#endif
