@@ -1,4 +1,4 @@
-//Ö÷³ÌĞò
+//ä¸»ç¨‹åº
 #include "stdio.h"
 #include "delay.h"
 #include "lcd.h"
@@ -8,7 +8,7 @@
 union
 { unsigned int i;
   float f;
-}humi_val,temp_val; 	//¶¨ÒåÁ½¸ö¹²Í¬Ìå£¬Ò»¸öÓÃÓÚÊª¶È£¬Ò»¸öÓÃÓÚÎÂ¶È
+}humi_val,temp_val; 	//å®šä¹‰ä¸¤ä¸ªå…±åŒä½“ï¼Œä¸€ä¸ªç”¨äºæ¹¿åº¦ï¼Œä¸€ä¸ªç”¨äºæ¸©åº¦
 float temp_value = 0;
 float humi_value = 0;
 
@@ -16,37 +16,37 @@ void main(void)
 {	
 	unsigned char error,checksum;
 	unsigned char HUMI,TEMP;
-	unsigned char addr = 0;//µØÖ·
-	unsigned char data[5];//ËÍÈëEEPROMÊı¾İ
+	unsigned char addr = 0;//åœ°å€
+	unsigned char data[5];//é€å…¥EEPROMæ•°æ®
 	char humi_result[2] = {0};
-	unsigned char valueCount = 0;//²âÁ¿¼ÆÊı
+	unsigned char valueCount = 0;//æµ‹é‡è®¡æ•°
 	HUMI=0X01;
 	TEMP=0X02;
 
-    Initial_IO();	//IO³õÊ¼»¯
-	InitLed();		//LED³õÊ¼»¯	 
-    InitKey();      //°´¼ü³õÊ¼»¯   
-	Lcd_Init();		//LCD³õÊ¼»¯
-	InitUart();     //´®¿Ú³õÊ¼»¯º¯Êı
-	InitT1();		//¶¨Ê±Æ÷T1³õÊ¼»¯
-	InitialADC();	//ADC³õÊ¼»¯
-	s_connectionreset();//SHT11³õÊ¼»¯
-	LCD_Clear(WHITE);//ÇåÆÁ
+    Initial_IO();	//IOåˆå§‹åŒ–
+	InitLed();		//LEDåˆå§‹åŒ–	 
+    InitKey();      //æŒ‰é”®åˆå§‹åŒ–   
+	Lcd_Init();		//LCDåˆå§‹åŒ–
+	InitUart();     //ä¸²å£åˆå§‹åŒ–å‡½æ•°
+	InitT1();		//å®šæ—¶å™¨T1åˆå§‹åŒ–
+	InitialADC();	//ADCåˆå§‹åŒ–
+	s_connectionreset();//SHT11åˆå§‹åŒ–
+	LCD_Clear(WHITE);//æ¸…å±
 	BACK_COLOR=WHITE;
 
-	LCD_ShowChinese32x32(20,5,0,16,RED);   //ÏÔÊ¾Ãû×Ö£ºÎâÅô·É
+	LCD_ShowChinese32x32(20,5,0,16,RED);   //æ˜¾ç¤ºåå­—
 	LCD_ShowChinese32x32(38,5,1,16,RED);   
 	LCD_ShowChinese32x32(54,5,2,16,RED);   
-	//ÏÔÊ¾Ñ§ºÅ£º41924045
-	LCD_ShowNum(90,5,41,2,RED);
-	LCD_ShowNum(106,5,92,2,RED);
-	LCD_ShowNum(122,5,40,2,RED);
-	LCD_ShowNum(138,5,45,2,RED);
-    LCD_ShowPicture(0,25,179,264);//ÏÔÊ¾Í¼Æ¬£º·Å´óºó·Ö±æÂÊÎª240*180
+	//æ˜¾ç¤ºå­¦å·
+	LCD_ShowNum(90,5,12,2,RED);
+	LCD_ShowNum(106,5,34,2,RED);
+	LCD_ShowNum(122,5,56,2,RED);
+	LCD_ShowNum(138,5,78,2,RED);
+    LCD_ShowPicture(0,25,179,264);//æ˜¾ç¤ºå›¾ç‰‡ï¼šæ”¾å¤§ååˆ†è¾¨ç‡ä¸º240*180
 	
     LCD_ShowString(58,280,"ADC:",RED);        
     LCD_ShowString(10,300,"Tempeture:",RED);        
-	uchar clear[]="      ";//LCDÇå³ı×Ö·û´®
+	uchar clear[]="      ";//LCDæ¸…é™¤å­—ç¬¦ä¸²
                 
         while(1)
 		{
@@ -60,10 +60,10 @@ void main(void)
 					LED3 = 0;
 					if(adcComplete)
     				{
-						LCD_ShowString(90,300,clear,RED);//Çå³ıÎÂ¶ÈÏÔÊ¾
-						LCD_ShowString(90,280,adcdata,RED);//ADCÏÔÊ¾
+						LCD_ShowString(90,300,clear,RED);//æ¸…é™¤æ¸©åº¦æ˜¾ç¤º
+						LCD_ShowString(90,280,adcdata,RED);//ADCæ˜¾ç¤º
       					adcComplete = 0;
-      					InitialADC(); //Æô¶¯ÏÂÒ»´Î×ª»»
+      					InitialADC(); //å¯åŠ¨ä¸‹ä¸€æ¬¡è½¬æ¢
     				}
 				}
 				
@@ -75,41 +75,41 @@ void main(void)
 				{
 					while(t1_count%10);
 					t1_count -= 10;
-					//¶¨Ê±Æ÷0.1sÖĞ¶ÏÒ»´Î 10´ÎÎª1sÑÓÊ±
+					//å®šæ—¶å™¨0.1sä¸­æ–­ä¸€æ¬¡ 10æ¬¡ä¸º1så»¶æ—¶
 					LED3 = 0;
 					error = 0;
-					error+=s_measure((unsigned char*) &temp_val.i,&checksum,TEMP);  //ÎÂ¶È²âÁ¿
+					error+=s_measure((unsigned char*) &temp_val.i,&checksum,TEMP);  //æ¸©åº¦æµ‹é‡
 					temp_value = temp_val.i * 0.01 - 39.6;
-					LCD_ShowString(90,280,clear,RED);		//Çå³ıADCÏÔÊ¾
-					LCD_ShowNum1(90,300,temp_value,4,RED);	//ÎÂ¶ÈÏÔÊ¾
+					LCD_ShowString(90,280,clear,RED);		//æ¸…é™¤ADCæ˜¾ç¤º
+					LCD_ShowNum1(90,300,temp_value,4,RED);	//æ¸©åº¦æ˜¾ç¤º
 					
 					if(valueCount<100)
 					{
-						LCD_ShowNum(200,300,valueCount,2,RED);	//²âÁ¿¼ÆÊı µ÷ÊÔ/ÑéÖ¤
+						LCD_ShowNum(200,300,valueCount,2,RED);	//æµ‹é‡è®¡æ•° è°ƒè¯•/éªŒè¯
 						LED2 = 1;
-						error+=s_measure((unsigned char*) &humi_val.i,&checksum,HUMI);  //Êª¶È²âÁ¿
+						error+=s_measure((unsigned char*) &humi_val.i,&checksum,HUMI);  //æ¹¿åº¦æµ‹é‡
 						humi_value = humi_val.i * 0.0367 - 2.0468;
 						
-						sprintf(humi_result,"%.f",humi_value*100);//±£´æÕûÊıºÍ2Î»Ğ¡Êı
-						E2WriteP((unsigned char*)humi_result, addr, 2);		//Êı¾İ´æÈëEEPROM
+						sprintf(humi_result,"%.f",humi_value*100);//ä¿å­˜æ•´æ•°å’Œ2ä½å°æ•°
+						E2WriteP((unsigned char*)humi_result, addr, 2);		//æ•°æ®å­˜å…¥EEPROM
 						valueCount++;
 						addr += 2;
 					}
 					else
 					{
-						LED2 = 0;//Ï¨ÃğLED2 Í£Ö¹Êª¶È²âÁ¿
-						addr = 0;//²âÁ¿½áÊøÖ¸ÏòÊı¾İÆğÊ¼µã ×¼±¸¶Á³ö
+						LED2 = 0;//ç†„ç­LED2 åœæ­¢æ¹¿åº¦æµ‹é‡
+						addr = 0;//æµ‹é‡ç»“æŸæŒ‡å‘æ•°æ®èµ·å§‹ç‚¹ å‡†å¤‡è¯»å‡º
 					}
 					if(error!=0)
 					{
-						s_connectionreset() ; //Èç¹û·¢Éú´íÎó£¬ÏµÍ³¸´Î»
+						s_connectionreset() ; //å¦‚æœå‘ç”Ÿé”™è¯¯ï¼Œç³»ç»Ÿå¤ä½
 						LED1 = !LED1;
 					}	
 					else
 					{ 
-						humi_val.f=(float)humi_val.i;                   //×ª»»Îª¸¡µãÊı
-						temp_val.f=(float)temp_val.i;                   //×ª»»Îª¸¡µãÊı
-						calc_sth11(&humi_val.f,&temp_val.f);            //ĞŞÕıÏà¶ÔÊª¶È¼°ÎÂ¶È
+						humi_val.f=(float)humi_val.i;                   //è½¬æ¢ä¸ºæµ®ç‚¹æ•°
+						temp_val.f=(float)temp_val.i;                   //è½¬æ¢ä¸ºæµ®ç‚¹æ•°
+						calc_sth11(&humi_val.f,&temp_val.f);            //ä¿®æ­£ç›¸å¯¹æ¹¿åº¦åŠæ¸©åº¦
 					}
 					
 				}	
@@ -119,20 +119,20 @@ void main(void)
 			{
 				while(flag_KEY == 3)
 				{
-					LCD_ShowString(90,300,clear,RED);	//Çå³ıÎÂ¶ÈÏÔÊ¾
-					LCD_ShowString(90,280,clear,RED);	//Çå³ıADCÏÔÊ¾
+					LCD_ShowString(90,300,clear,RED);	//æ¸…é™¤æ¸©åº¦æ˜¾ç¤º
+					LCD_ShowString(90,280,clear,RED);	//æ¸…é™¤ADCæ˜¾ç¤º
 					LED2 = 0;
 
-					LED3 = LED || GetData;	//Î´½ÓÊÜÃüÁî½«ÉÁË¸£¬½ÓÊÕÃüÁî½«³£ÁÁ
-					//¾­¹ıGetData# ÃüÁîÅĞ¶Ï
-					while(addr<200 & GetData)	//Êä³ö100¸öÊª¶ÈÖµ ·½Ê½£ºÃ¿´Î¶ÁÈ¡Á½´Î Ò»´ÎÕûÊı Ò»´ÎĞ¡Êı UARTµ÷Õû¸ñÊ½Êä³ö
+					LED3 = LED || GetData;	//æœªæ¥å—å‘½ä»¤å°†é—ªçƒï¼Œæ¥æ”¶å‘½ä»¤å°†å¸¸äº®
+					//ç»è¿‡GetData# å‘½ä»¤åˆ¤æ–­
+					while(addr<200 & GetData)	//è¾“å‡º100ä¸ªæ¹¿åº¦å€¼ æ–¹å¼ï¼šæ¯æ¬¡è¯»å–ä¸¤æ¬¡ ä¸€æ¬¡æ•´æ•° ä¸€æ¬¡å°æ•° UARTè°ƒæ•´æ ¼å¼è¾“å‡º
 					{
 						E2Read(data, addr,1);
-						UartTX_Send_String((char*)data, 2);	//ÕûÊıÊä³ö
-						UartTX_Send_String(".", 1);		//ÏÔÊ¾Ğ¡Êıµã
+						UartTX_Send_String((char*)data, 2);	//æ•´æ•°è¾“å‡º
+						UartTX_Send_String(".", 1);		//æ˜¾ç¤ºå°æ•°ç‚¹
 						E2Read(data, addr + 1,1);
-						UartTX_Send_String((char*)data, 2);	//Ğ¡ÊıÊä³ö
-						UartTX_Send_String("\n", 1);	//»»ĞĞ
+						UartTX_Send_String((char*)data, 2);	//å°æ•°è¾“å‡º
+						UartTX_Send_String("\n", 1);	//æ¢è¡Œ
 						addr+=2;
 						DelayMS(5);
 					}
