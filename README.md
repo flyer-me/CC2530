@@ -5,3 +5,7 @@
 
 
 如果喜欢，可以在右上角为我加星！
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kaixindelele/ChatPaper&type=Date)](https://star-history.com/#kaixindelele/ChatPaper&Date)
