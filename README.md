@@ -8,4 +8,4 @@
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=kaixindelele/ChatPaper&type=Date)](https://star-history.com/#kaixindelele/ChatPaper&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos= &type=Date)](https://star-history.com/# &Date)
